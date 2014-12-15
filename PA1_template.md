@@ -1,5 +1,5 @@
 ---
-title:"Reproducible Research: Peer Assessment 1"
+title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
     keep_md: true
@@ -27,19 +27,35 @@ hist(steppday$steps,col=1,main="Histogram - Total No. of Steps per Day",xlab="To
 ## Mean & Median of Total No. of Steps taken per Day
 
 ```r
-sprintf("Mean Value for Total No. of Steps per Day is '%a'",mean(steppday$steps))
+sprintf("Mean Value for Total No. of Steps per Day is")
 ```
 
 ```
-## [1] "Mean Value for Total No. of Steps per Day is '0x1.5071826a439f6p+13'"
+## [1] "Mean Value for Total No. of Steps per Day is"
 ```
 
 ```r
-sprintf("Median Value for Total No. of Steps per Day is '%a'",median(steppday$steps))
+mean(as.numeric(steppday$steps))
 ```
 
 ```
-## [1] "Median Value for Total No. of Steps per Day is '0x1.5068p+13'"
+## [1] 10766.19
+```
+
+```r
+sprintf("Median Value for Total No. of Steps per Day is")
+```
+
+```
+## [1] "Median Value for Total No. of Steps per Day is"
+```
+
+```r
+median(as.numeric(steppday$steps))
+```
+
+```
+## [1] 10765
 ```
 
 
@@ -55,11 +71,51 @@ plot(int_steps$interval,int_steps$steps,type='l',col=1,main="Avg. No. of Steps a
 
 ```r
 max_steps_int <- int_steps[which.max(int_steps$steps),] ##Finding row with max interval
-sprintf("Max interval is '%a'-'%a'with max. avg. no. of steps'%a'",as.numeric(max_steps_int$interval),as.numeric(max_steps_int$interval)+5,as.numeric(max_steps_int$steps))
+sprintf("Max Interval is")
 ```
 
 ```
-## [1] "Max interval is '0x1.a18p+9'-'0x1.a4p+9'with max. avg. no. of steps'0x1.9c56f1826a43ap+7'"
+## [1] "Max Interval is"
+```
+
+```r
+as.numeric(max_steps_int$interval)
+```
+
+```
+## [1] 835
+```
+
+```r
+sprintf("-")
+```
+
+```
+## [1] "-"
+```
+
+```r
+as.numeric(max_steps_int$interval)+5
+```
+
+```
+## [1] 840
+```
+
+```r
+sprintf("Max steps in this interval is")
+```
+
+```
+## [1] "Max steps in this interval is"
+```
+
+```r
+as.numeric(max_steps_int$steps)
+```
+
+```
+## [1] 206.1698
 ```
 
 
@@ -67,11 +123,11 @@ sprintf("Max interval is '%a'-'%a'with max. avg. no. of steps'%a'",as.numeric(ma
 
 ```r
 data_na <- data[!complete.cases(data),] ##Rows with NAs
-sprintf("No.of rows with missing values are '%a'",nrow(data_na))
+nrow(data_na)
 ```
 
 ```
-## [1] "No.of rows with missing values are '0x1.2p+11'"
+## [1] 2304
 ```
 ##Impute Mean for NA Values of the 5-min interval
 
@@ -100,35 +156,35 @@ hist(imputed_steps$steps,col=1,main="Histogram with Imputed Values",xlab="Total 
 ##Calcuating Mean & Median for Original Data Set and Data Set with Imputed Values
 
 ```r
-sprintf("Original Data Set Mean Value - '%a'",mean(steppday$steps))
+mean(steppday$steps)
 ```
 
 ```
-## [1] "Original Data Set Mean Value - '0x1.5071826a439f6p+13'"
-```
-
-```r
-sprintf("Original Data Set Median Value - '%a'",median(steppday$steps))
-```
-
-```
-## [1] "Original Data Set Median Value - '0x1.5068p+13'"
+## [1] 10766.19
 ```
 
 ```r
-sprintf("Imputed Data Set Mean Value - '%a'",mean(imputed_steps$steps))
+median(steppday$steps)
 ```
 
 ```
-## [1] "Imputed Data Set Mean Value - '0x1.5071826a439f6p+13'"
+## [1] 10765
 ```
 
 ```r
-sprintf("Imputed Data Set Median Value - '%a'",median(imputed_steps$steps))
+mean(imputed_steps$steps)
 ```
 
 ```
-## [1] "Imputed Data Set Median Value - '0x1.5071826a439f6p+13'"
+## [1] 10766.19
+```
+
+```r
+median(imputed_steps$steps)
+```
+
+```
+## [1] 10766.19
 ```
 * Though the Means remain the same due to imputation, there is minor difference (by 1) in Median
 

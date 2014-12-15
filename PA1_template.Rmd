@@ -4,22 +4,101 @@ output:
   html_document:
     keep_md: true
 ---
+=====================================================
 
 
 ## Loading and preprocessing the data
-
+##Assuming that the file is already unzipped in the local folder
+```{r,echo=TRUE}
+data <- read.csv("activity.csv",header=T)
+```
 
 
 ## What is mean total number of steps taken per day?
-
+```{r,echo=TRUE}
+data_trim <- na.omit(data) # Considering only complete cases
+steppday <- aggregate(steps ~ date, data_trim, sum) #calculating total steps per day
+hist(steppday$steps,col=1,main="Histogram - Total No. of Steps per Day",xlab="Total No. of steps each day")
+```
+## Mean & Median of Total No. of Steps taken per Day
+```{r,echo=TRUE}
+sprintf("Mean Value for Total No. of Steps per Day is")
+mean(as.numeric(steppday$steps))
+sprintf("Median Value for Total No. of Steps per Day is")
+median(as.numeric(steppday$steps))
+```
 
 
 ## What is the average daily activity pattern?
-
+```{r,echo=TRUE}
+int_steps <- aggregate(steps ~ interval, data_trim, mean) #Calculating Steps with respect to interval and summing them up
+plot(int_steps$interval,int_steps$steps,type='l',col=1,main="Avg. No. of Steps across all Days",xlab="Interval",ylab="Avg. No. of Steps")
+```
+## Interval with Max. No. of Steps across all the Days
+```{r,echo=TRUE}
+max_steps_int <- int_steps[which.max(int_steps$steps),] ##Finding row with max interval
+sprintf("Max Interval is")
+as.numeric(max_steps_int$interval)
+sprintf("-")
+as.numeric(max_steps_int$interval)+5
+sprintf("Max steps in this interval is")
+as.numeric(max_steps_int$steps)
+```
 
 
 ## Imputing missing values
-
+```{r,echo=TRUE}
+data_na <- data[!complete.cases(data),] ##Rows with NAs
+nrow(data_na)
+```
+##Impute Mean for NA Values of the 5-min interval
+```{r,echo=TRUE}
+for(i in 1:nrow(data)){
+        if(is.na(data$steps[i])){
+                int_val <- data$interval[i]
+                rid <- which(int_steps$interval==int_val)
+                steps_val <- int_steps$steps[rid]
+                data$steps[i] <- steps_val
+        }
+} 
+```
+##Aggregate Steps with respect to date
+```{r,echo=TRUE}
+imputed_steps <- aggregate(steps ~ date,data,sum)
+```
+##Creating Histogram with Imputed Values
+```{r,echo=TRUE}
+hist(imputed_steps$steps,col=1,main="Histogram with Imputed Values",xlab="Total No. of Steps each day")
+```
+##Calcuating Mean & Median for Original Data Set and Data Set with Imputed Values
+```{r,echo=TRUE}
+mean(steppday$steps)
+median(steppday$steps)
+mean(imputed_steps$steps)
+median(imputed_steps$steps)
+```
+* Though the Means remain the same due to imputation, there is minor difference (by 1) in Median
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r,echo=TRUE}
+#Convert Date to Date Class
+data$date <- as.Date(data$date,"%Y-%m-%d")
+data$day <- weekdays(data$date) # Including Day of the Week
+data$day_type <- c("weekday") # Including new varible Daytype
+for(i in 1:nrow(data)) { # Segregating Weekday & Weekends
+        if(tolower(data$day[i]) == "saturday" || tolower(data$day[i]) == "sunday") {
+                data$day_type <- c("weekend")
+        }
+}
+#Convert Day Type to Factor Variable
+data$day_type = as.factor(data$day_type)
+# Aggregate Steps across interval and Day Type
+imp_int_steps <- aggregate(steps ~ interval + day_type, data, mean)
+#Call ggplot2 package for panel plots
+library(ggplot2)
+qplot(interval, steps, data=imp_int_steps, geom=c("line"),xlab="Interval",ylab="No. of Steps",main="")+facet_wrap(~day_type,ncol=1)
+rm(list=ls()) # Frees the memory
+#library(knitr)
+#knit2html("PA1_template.Rmd",keep_md=TRUE)
+```

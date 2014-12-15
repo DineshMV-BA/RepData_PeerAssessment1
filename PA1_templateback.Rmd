@@ -99,6 +99,6 @@ imp_int_steps <- aggregate(steps ~ interval + day_type, data, mean)
 library(ggplot2)
 qplot(interval, steps, data=imp_int_steps, geom=c("line"),xlab="Interval",ylab="No. of Steps",main="")+facet_wrap(~day_type,ncol=1)
 rm(list=ls()) # Frees the memory
-#library(knitr)
-#knit2html("PA1_template.Rmd",keep_md=TRUE)
+library(knitr)
+knit2html("PA1_template.Rmd",keep_md=TRUE)
 ```
