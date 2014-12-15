@@ -22,8 +22,10 @@ hist(steppday$steps,col=1,main="Histogram - Total No. of Steps per Day",xlab="To
 ```
 ## Mean & Median of Total No. of Steps taken per Day
 ```{r,echo=TRUE}
-sprintf("Mean Value for Total No. of Steps per Day is '%a'",mean(steppday$steps))
-sprintf("Median Value for Total No. of Steps per Day is '%a'",median(steppday$steps))
+sprintf("Mean Value for Total No. of Steps per Day is")
+mean(as.numeric(steppday$steps))
+sprintf("Median Value for Total No. of Steps per Day is")
+median(as.numeric(steppday$steps))
 ```
 
 
@@ -35,14 +37,19 @@ plot(int_steps$interval,int_steps$steps,type='l',col=1,main="Avg. No. of Steps a
 ## Interval with Max. No. of Steps across all the Days
 ```{r,echo=TRUE}
 max_steps_int <- int_steps[which.max(int_steps$steps),] ##Finding row with max interval
-sprintf("Max interval is '%a'-'%a'with max. avg. no. of steps'%a'",as.numeric(max_steps_int$interval),as.numeric(max_steps_int$interval)+5,as.numeric(max_steps_int$steps))
+sprintf("Max Interval is")
+as.numeric(max_steps_int$interval)
+sprintf("-")
+as.numeric(max_steps_int$interval)+5
+sprintf("Max steps in this interval is")
+as.numeric(max_steps_int$steps)
 ```
 
 
 ## Imputing missing values
 ```{r,echo=TRUE}
 data_na <- data[!complete.cases(data),] ##Rows with NAs
-sprintf("No.of rows with missing values are '%a'",nrow(data_na))
+nrow(data_na)
 ```
 ##Impute Mean for NA Values of the 5-min interval
 ```{r,echo=TRUE}
@@ -65,10 +72,10 @@ hist(imputed_steps$steps,col=1,main="Histogram with Imputed Values",xlab="Total 
 ```
 ##Calcuating Mean & Median for Original Data Set and Data Set with Imputed Values
 ```{r,echo=TRUE}
-sprintf("Original Data Set Mean Value - '%a'",mean(steppday$steps))
-sprintf("Original Data Set Median Value - '%a'",median(steppday$steps))
-sprintf("Imputed Data Set Mean Value - '%a'",mean(imputed_steps$steps))
-sprintf("Imputed Data Set Median Value - '%a'",median(imputed_steps$steps))
+mean(steppday$steps)
+median(steppday$steps)
+mean(imputed_steps$steps)
+median(imputed_steps$steps)
 ```
 * Though the Means remain the same due to imputation, there is minor difference (by 1) in Median
 
